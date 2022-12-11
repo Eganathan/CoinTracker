@@ -4,14 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import online.onenut.cointracker.ui.home.HomeScreen
+import online.onenut.cointracker.ui.home.HomeScreenScaffold
+import online.onenut.cointracker.ui.home.state.HomeState
 import online.onenut.cointracker.ui.theme.CoinTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +25,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Red.copy(alpha = 0.1f)
                 ) {
-                    HomeScreen()
+                    val test = remember { HomeState() }
+                    HomeScreenScaffold(test)
                 }
             }
         }
