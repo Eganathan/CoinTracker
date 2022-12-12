@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import online.onenut.cointracker.ui.expense.ExpensesVM
 import online.onenut.cointracker.ui.home.HomeScreenScaffold
 import online.onenut.cointracker.ui.home.state.HomeState
 import online.onenut.cointracker.ui.theme.CoinTrackerTheme
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Red.copy(alpha = 0.1f)
                 ) {
-                    val test = remember { HomeState() }
+                    val test = remember { HomeState(ExpensesVM()) }
                     HomeScreenScaffold(test)
                 }
             }

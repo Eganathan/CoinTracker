@@ -4,26 +4,41 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import online.onenut.cointracker.ui.home.state.Type
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun QuickAddComponent(
+    title: MutableState<TextFieldValue>,
+    amount: MutableState<TextFieldValue>,
+    type: MutableState<Type>,
     onCancel: () -> Unit,
     onDone: () -> Unit
 ) {
+    val focusRequester = FocusRequester()
+    val fm = LocalFocusManager.current
+
     Dialog({
         onCancel.invoke()
     }) {
@@ -38,11 +53,15 @@ fun QuickAddComponent(
         ) {
             Column(Modifier.padding(15.dp), verticalArrangement = Arrangement.SpaceEvenly) {
                 TextField(
-                    value = TextFieldValue("Quick Title"),
-                    onValueChange = {},
+                    label = { Text(text = "Title") },
+                    value = title.value,
+                    onValueChange = {
+                        title.value = it
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 5.dp),
+                        .padding(top = 5.dp)
+                        .focusRequester(focusRequester = focusRequester),
                     shape = RoundedCornerShape(
                         bottomStart = 0.dp, bottomEnd = 0.dp, topStart = 15.dp, topEnd = 15.dp
                     ),
@@ -53,9 +72,9 @@ fun QuickAddComponent(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                     ),
+                    keyboardActions = KeyboardActions(onNext = { fm.moveFocus(FocusDirection.Next) }),
                     singleLine = true,
-                    //  leadingIcon = { Icon(imageVector = Icons.Default., contentDescription = "")}
-                    //    label = { Text(text = "Amount: 0.0")}
+                    maxLines = 1
                 )
                 Divider(
                     Modifier
@@ -65,8 +84,12 @@ fun QuickAddComponent(
 
                 )
                 TextField(
-                    value = TextFieldValue("Amount: 0.0"),
-                    onValueChange = {},
+                    label = { Text(text = "Amount") },
+                    value = amount.value,
+                    onValueChange = {
+                        if (it.text.toDoubleOrNull() != null)
+                            amount.value = it
+                    },
                     modifier = Modifier
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(
@@ -80,8 +103,7 @@ fun QuickAddComponent(
                         keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                     ),
                     singleLine = true,
-                    //  leadingIcon = { Icon(imageVector = Icons.Default., contentDescription = "")}
-                    //    label = { Text(text = "Amount: 0.0")}
+                    maxLines = 1
                 )
 
                 Row(
@@ -89,22 +111,23 @@ fun QuickAddComponent(
                         .fillMaxWidth()
                         .padding(horizontal = 25.dp, vertical = 15.dp)
                         .clip(RoundedCornerShape(30.dp))
-                        .background(Color.Green),
+                        .background(Color.LightGray.copy(0.3f)),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     FilterChip(
-                        selected = true,
-                        onClick = { /*TODO*/ },
-                        border = BorderStroke(1.dp, Color.Black),
-                        colors = ChipDefaults.filterChipColors(
-                            backgroundColor = Color.Red.copy(
-                                0.4f
-                            )
-                        ),
+                        selected = type.value == Type.EXPENSE,
+                        onClick = {
+                            type.value = Type.EXPENSE
+                        },
+                        border = if (type.value == Type.EXPENSE) BorderStroke(
+                            1.dp,
+                            Color.Black
+                        ) else null,
+                        //  colors = ChipDefaults.filterChipColors(backgroundColor = Color.White),
                         modifier = Modifier
                             .weight(0.4f)
-                            .padding(5.dp)
+                            .padding(start = 5.dp)
                     ) {
                         Text(
                             text = "Expense",
@@ -114,16 +137,18 @@ fun QuickAddComponent(
                     }
                     Spacer(modifier = Modifier.width(5.dp))
                     FilterChip(
-                        selected = true,
-                        colors = ChipDefaults.filterChipColors(
-                            backgroundColor = Color.Green.copy(
-                                0.4f
-                            )
-                        ),
-                        onClick = { /*TODO*/ },
+                        selected = type.value == Type.INCOME,
+                        // colors = ChipDefaults.filterChipColors(backgroundColor = Color.White),
+                        border = if (type.value == Type.INCOME) BorderStroke(
+                            1.dp,
+                            Color.Black
+                        ) else null,
+                        onClick = {
+                            type.value = Type.INCOME
+                        },
                         modifier = Modifier
                             .weight(0.4f)
-                            .padding(5.dp)
+                            .padding(end = 5.dp)
                     ) {
                         Text(
                             text = "Income",
@@ -132,7 +157,18 @@ fun QuickAddComponent(
                         )
                     }
                 }
+
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    TextButton(onClick = { onDone.invoke() }) {
+                        Text(text = "ADD TRANSACTION")
+                    }
+                }
             }
+        }
+
+
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
         }
     }
 }

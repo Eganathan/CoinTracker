@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -31,7 +32,17 @@ fun HomeScreenComponent(
     onRecentEntityClick: () -> Unit = {},
 ) {
     if (homeState.showQuickAdd.value)
-        QuickAddComponent(onDone = {}, onCancel = {homeState.showQuickAdd.value = false})
+        QuickAddComponent(
+            onDone = {
+                homeState.quickAdd()
+                homeState.showQuickAdd.value = false
+            },
+            onCancel = { homeState.showQuickAdd.value = false },
+            title = homeState.title,
+            amount = homeState.amount,
+            type = homeState.type
+        )
+
 
     Column(
         Modifier
@@ -172,14 +183,24 @@ fun HomeScreenComponent(
                     Text(text = "Recently Added...")
                 }
             }
-            items(9) {
+            items(homeState.recentlyAdded.value) {
                 Card(
                     Modifier
                         .heightIn(min = 85.dp)
                         .fillMaxWidth()
                         .padding(5.dp),
                     shape = RoundedCornerShape(10.dp)
-                ) {}
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(text = it.title ?: "")
+                            Text(text = it.amount.toString())
+                        }
+                    }
+                }
             }
         }
 

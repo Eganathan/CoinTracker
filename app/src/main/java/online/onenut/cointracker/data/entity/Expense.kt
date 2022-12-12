@@ -10,5 +10,5 @@ data class Expense(
     val createdDate: LocalDate = LocalDate.now(),
     val description: String? = null,
     val isDirty: Boolean = false,
-    val lastUpdated: LocalDate
+    val lastUpdated: LocalDate = LocalDate.now()
 )

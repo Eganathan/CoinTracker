@@ -49,7 +49,10 @@ fun HomeScreenScaffold(homeState: HomeState) {
         HomeScreenComponent(
             homeState = homeState,
             paddingValues = it,
-            onQuickADD = { homeState.showQuickAdd.value = true })
+            onQuickADD = {
+                homeState.showQuickAdd.value = true;
+                homeState.quickAdd()
+            })
     }
 
 }
