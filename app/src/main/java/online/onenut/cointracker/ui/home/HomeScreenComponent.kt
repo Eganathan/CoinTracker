@@ -180,10 +180,10 @@ fun HomeScreenComponent(
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    Text(text = "Recently Added...")
+                    Text(text = "Recently Added...  Size: ${homeState.recentlyAdded.value?.size}")
                 }
             }
-            items(homeState.recentlyAdded.value) {
+            items(homeState.recentlyAdded.value.orEmpty()) {
                 Card(
                     Modifier
                         .heightIn(min = 85.dp)

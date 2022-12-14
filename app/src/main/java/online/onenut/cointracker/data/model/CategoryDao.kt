@@ -1,11 +1,11 @@
-package online.onenut.cointracker.model
+package online.onenut.cointracker.data.model
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface CategoryDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun createExpense(category: Category)
 
     @Update

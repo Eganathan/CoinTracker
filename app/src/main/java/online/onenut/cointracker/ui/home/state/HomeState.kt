@@ -4,22 +4,26 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
-import online.onenut.cointracker.data.entity.Expense
-import online.onenut.cointracker.ui.expense.ExpensesVM
+import androidx.lifecycle.LiveData
+import online.onenut.cointracker.data.model.Expense
+import online.onenut.cointracker.ui.BaseViewModel
 
 enum class Type { EXPENSE, INCOME }
 
-class HomeState(val vm: ExpensesVM) {
+class HomeState(val vm: BaseViewModel) {
     val showQuickAdd: MutableState<Boolean> = mutableStateOf(false)
     val title = mutableStateOf(TextFieldValue(""))
     val amount = mutableStateOf(TextFieldValue(""))
     val type = mutableStateOf(Type.EXPENSE)
-    val recentlyAdded: MutableState<List<Expense>> = mutableStateOf(listOf())
+
+    val recentlyAdded: LiveData<List<Expense>> = vm.expensesList
 
     fun quickAdd() {
         when (type.value) {
             Type.EXPENSE -> {
+//                vm.createExpense(
                 vm.createExpense(
+                    expense =
                     Expense(
                         ID = 0,
                         title = title.value.text,
@@ -29,9 +33,13 @@ class HomeState(val vm: ExpensesVM) {
             }
             Type.INCOME -> TODO()
         }
-        recentlyAdded.value = vm.getExpenses()
         title.value = TextFieldValue()
         amount.value = TextFieldValue()
-        Log.e("ADD", "${recentlyAdded.value}")
+        getExpenses()
+        Log.e("ADD", "${recentlyAdded.value?.size}")
+    }
+
+    fun getExpenses() {
+        vm.getAllExpenses()
     }
 }

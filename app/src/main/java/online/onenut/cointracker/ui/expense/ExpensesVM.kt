@@ -3,9 +3,11 @@ package online.onenut.cointracker.ui.expense
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import online.onenut.cointracker.data.entity.Expense
+import online.onenut.cointracker.data.model.Expense
+import online.onenut.cointracker.data.model.ExpenseDao
+import online.onenut.cointracker.ui.BaseViewModel
 
-class ExpensesVM() : ViewModel() {
+class ExpensesVM(private val expenseDao: ExpenseDao) : ViewModel() {
     val expenses: MutableState<List<Expense>> = mutableStateOf(listOf())
 
     fun createExpense(expense: Expense): Boolean {
