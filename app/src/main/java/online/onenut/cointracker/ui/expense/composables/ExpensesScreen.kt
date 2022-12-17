@@ -1,5 +1,6 @@
 package online.onenut.cointracker.ui.expense.composables
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,10 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.util.*
 
@@ -42,6 +41,7 @@ fun ExpensesListScreen() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExpensesListCard(
     modifier: Modifier = Modifier,
@@ -50,16 +50,16 @@ fun ExpensesListCard(
     secondaryTitle: String = "Chennai office last months payment- sdjnflskjdfnlsjkdnfuwernfljksdcnskjdhflweidfnlwfnwueirnfukrthkqwnbfiwueyrgwbfwiylerbfougrflajhsdbfkayrgtwquyerbwuyfuwyfkquywegr",
     amount: String = "9999999999999999",
     primaryTag: PrimaryExpenseTag = PrimaryExpenseTag.PRIMARY,
-    tags: List<String> = listOf("Rent", "Office"),
+    tags: List<String> = listOf("Rent", "Office", "GPay", "HDFC"),
     onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .padding(vertical = 4.5.dp)
-            .defaultMinSize(minHeight = 70.dp)
-            // .heightIn(min = 75.dp)
+            .defaultMinSize(minHeight = 65.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(7.dp))
+            .wrapContentHeight()
             .clickable(
                 enabled = enable,
                 onClickLabel = ""
@@ -76,24 +76,33 @@ fun ExpensesListCard(
             Column(
                 modifier = Modifier
                     .weight(weight = 0.8f)
-                    .padding(top = 10.dp),
-                verticalArrangement = Arrangement.Center
+                    .padding(top = 5.dp),
+                verticalArrangement = Arrangement.Top
             ) {
                 Text(text = primaryTitle, style = MaterialTheme.typography.titleMedium)
-                Text(
-                    text = secondaryTitle,
-                    style = MaterialTheme.typography.titleSmall.copy(color = Color.Black.copy(alpha = 0.4f)),
-                    modifier = Modifier.padding(start = 4.dp, top = 3.dp),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    softWrap = true
-                )
+//                Text(
+//                    text = secondaryTitle,
+//                    style = MaterialTheme.typography.titleSmall.copy(color = Color.Black.copy(alpha = 0.4f)),
+//                    modifier = Modifier.padding(start = 4.dp, top = 3.dp),
+//                    overflow = TextOverflow.Ellipsis,
+//                    maxLines = 1,
+//                    softWrap = true
+//                )
                 LazyRow(
                     Modifier
-                        .padding(start = 1.dp,top = 5.dp, bottom = 5.dp)
-                        .heightIn(min = 22.dp, max = 26.dp)
+                        .padding(start = 1.dp, top = 7.dp)
+                        .heightIn(min = 22.dp, max = 26.dp),
                 )
-                { items(tags) { PreviewTagChip(text = it) } }
+                {
+                    stickyHeader {
+                        PreviewTagChip(
+                            text = "29th,Dec 2022",
+                            backgroundColor = Color.LightGray,
+                            contentColor = Color.White
+                        )
+                    }
+                    items(tags) { PreviewTagChip(text = it) }
+                }
             }
             Column(
                 modifier = Modifier
@@ -113,7 +122,11 @@ fun ExpensesListCard(
                     softWrap = true
                 )
                 PreviewTagChip(text = primaryTag.name.lowercase()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }, backgroundColor = if(primaryTag == PrimaryExpenseTag.PRIMARY) Color.Green.copy(alpha = 0.1f) else Color.Red.copy(0.2f))
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                    backgroundColor = if (primaryTag == PrimaryExpenseTag.PRIMARY) Color.Green.copy(
+                        alpha = 0.1f
+                    ) else Color.Red.copy(0.2f)
+                )
             }
         }
 

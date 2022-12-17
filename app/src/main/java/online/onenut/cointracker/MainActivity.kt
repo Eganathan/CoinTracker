@@ -16,6 +16,7 @@ import online.onenut.cointracker.data.ExpenseRepositiry
 import online.onenut.cointracker.data.model.CoinTrackerDB
 import online.onenut.cointracker.ui.BaseViewModel
 import online.onenut.cointracker.ui.expense.ExpensesVM
+import online.onenut.cointracker.ui.expense.composables.ExpensesListScreen
 import online.onenut.cointracker.ui.home.HomeScreenScaffold
 import online.onenut.cointracker.ui.home.state.HomeState
 import online.onenut.cointracker.ui.theme.CoinTrackerTheme
@@ -33,7 +34,8 @@ class MainActivity : ComponentActivity() {
 
                     val context = LocalContext.current
                     val test = remember { HomeState(BaseViewModel(expenseRepositiry = ExpenseRepositiry(expenseDao = CoinTrackerDB.getInstance(context).ExpenseDao()))) }
-                    HomeScreenScaffold(test)
+//                    HomeScreenScaffold(test)
+                    ExpensesListScreen()
                 }
             }
         }
