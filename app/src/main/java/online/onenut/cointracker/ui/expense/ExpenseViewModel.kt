@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import online.onenut.cointracker.data.model.Expense
 import online.onenut.cointracker.data.dao.ExpenseDao
-import online.onenut.cointracker.data.impl.ExpenseRepository
+import online.onenut.cointracker.data.repository.ExpenseRepository
 
 class ExpenseViewModel(private val repository: ExpenseRepository):ViewModel(){
     val expenses: MutableState<List<Expense>?> = mutableStateOf(null)

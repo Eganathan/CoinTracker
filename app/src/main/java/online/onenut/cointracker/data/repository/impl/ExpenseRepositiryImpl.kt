@@ -1,4 +1,4 @@
-package online.onenut.cointracker.data.impl
+package online.onenut.cointracker.data.repository.impl
 
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import online.onenut.cointracker.data.dao.ExpenseDao
 import online.onenut.cointracker.data.model.Expense
+import online.onenut.cointracker.data.repository.ExpenseRepository
 
 class ExpenseRepositiryImpl(private val expenseDao: ExpenseDao) : ExpenseRepository {
     override val allExpenses: MutableLiveData<List<Expense>> = MutableLiveData()
@@ -31,16 +32,5 @@ class ExpenseRepositiryImpl(private val expenseDao: ExpenseDao) : ExpenseReposit
     override fun deleteExpense(expense: Expense) =
         coroutineScope.launch(Dispatchers.IO) { expenseDao.deleteExpense(expense = expense) }
 
-
-}
-
-interface ExpenseRepository {
-    val allExpenses: MutableLiveData<List<Expense>>
-
-    fun getExpenses()
-    fun getExpense(id: Long): Flow<Expense?>
-    fun createExpense(expense: Expense): Job
-    fun updateExpense(expense: Expense): Job
-    fun deleteExpense(expense: Expense): Job
 
 }

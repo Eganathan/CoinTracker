@@ -1,4 +1,4 @@
-package online.onenut.cointracker.data.model
+package online.onenut.cointracker.data
 
 import android.content.Context
 import androidx.room.Database
@@ -7,6 +7,9 @@ import androidx.room.RoomDatabase
 import online.onenut.cointracker.data.dao.CategoryDao
 import online.onenut.cointracker.data.dao.ExpenseDao
 import online.onenut.cointracker.data.dao.IncomeDao
+import online.onenut.cointracker.data.model.Category
+import online.onenut.cointracker.data.model.Expense
+import online.onenut.cointracker.data.model.Income
 import online.onenut.cointracker.strings.DBKeys
 
 @Database(

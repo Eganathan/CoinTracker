@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import online.onenut.cointracker.data.impl.ExpenseRepositiryImpl
+import online.onenut.cointracker.data.repository.impl.ExpenseRepositiryImpl
 import online.onenut.cointracker.data.model.Expense
 import javax.inject.Inject
 
