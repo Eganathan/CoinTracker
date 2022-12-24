@@ -1,7 +1,6 @@
 package online.onenut.cointracker
 
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -23,6 +23,7 @@ import online.onenut.cointracker.ui.home.state.HomeState
 import online.onenut.cointracker.ui.income.IncomeViewModel
 import online.onenut.cointracker.ui.income.composables.IncomeListScreen
 import online.onenut.cointracker.ui.income.states.IncomeListState
+import online.onenut.cointracker.ui.income.states.rememberIncomeListState
 import online.onenut.cointracker.ui.theme.CoinTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,47 +39,20 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val context = LocalContext.current
-                    val keyboard = LocalSoftwareKeyboardController.current
                     val coinTrackerDB = CoinTrackerDB.getInstance(context)
+
                     val expenseRepository = ExpenseRepositiryImpl(coinTrackerDB.ExpenseDao())
                     val incomeRepository = IncomeRepositoryImpl(coinTrackerDB.IncomeDao())
                     val scope = rememberCoroutineScope()
                     val modelBottomSheetState = rememberModalBottomSheetState(
                         initialValue = ModalBottomSheetValue.Hidden,
                         confirmStateChange = { ModalBottomSheetValue.Expanded != it })
-                    val test = remember {
-                        HomeState(
-                            BaseViewModel(
-                                expenseRepositiry = ExpenseRepositiryImpl(expenseDao = coinTrackerDB.ExpenseDao())
-                            )
-                        )
-                    }
+                    val test = remember { HomeState(BaseViewModel(expenseRepositiry = ExpenseRepositiryImpl(expenseDao = coinTrackerDB.ExpenseDao()))) }
                     // HomeScreenScaffold(test)
                     // ExpensesListScreen(expensesState = ExpensesState(ExpenseViewModel(expenseRepository)))
-                    IncomeListScreen(
-                        state = IncomeListState(
-                            IncomeViewModel(incomeRepository),
-                            scope,
-                            modelBottomSheetState,
-                            keyboard
-                        )
-                    )
+                    IncomeListScreen(state = rememberIncomeListState(viewModel = IncomeViewModel(incomeRepository)))
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CoinTrackerTheme {
-        Greeting("Android")
     }
 }
