@@ -15,8 +15,9 @@ import online.onenut.cointracker.strings.DBKeys
 //    )]
 )
 data class Income(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "income_id")
-    val ID: Long,
+    @ColumnInfo(name = "income_id")
+    @PrimaryKey(autoGenerate = true)
+    val ID: Long = 0,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "amount") val amount: Double? = 0.0,
 //    @ColumnInfo(name = "category_id") val category: Category? = null,

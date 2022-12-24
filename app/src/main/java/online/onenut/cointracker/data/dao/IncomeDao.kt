@@ -17,10 +17,10 @@ interface IncomeDao {
     @Delete
     fun deleteIncome(income: Income)
 
-    @Query("SELECT * FROM INCOME_TABLE")
-    fun getIncomes(): LiveData<List<Income>?>
+    @Query("SELECT * FROM income_table")
+    fun getIncomes(): Flow<List<Income>>
 
-    @Query("SELECT * FROM INCOME_TABLE WHERE income_id == :id")
+    @Query("SELECT * FROM income_table WHERE income_id == :id")
     fun getIncome(id: Long): Income
 
 }
