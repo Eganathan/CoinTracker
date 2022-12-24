@@ -1,7 +1,9 @@
-package online.onenut.cointracker.data.model
+package online.onenut.cointracker.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+import online.onenut.cointracker.data.model.Income
 
 @Dao
 interface IncomeDao {
@@ -19,6 +21,6 @@ interface IncomeDao {
     fun getIncomes(): LiveData<List<Income>?>
 
     @Query("SELECT * FROM INCOME_TABLE WHERE income_id == :id")
-    fun getIncome(id: Long): Income?
+    fun getIncome(id: Long): Income
 
 }

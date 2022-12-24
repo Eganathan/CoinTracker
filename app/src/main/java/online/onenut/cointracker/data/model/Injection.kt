@@ -1,6 +1,9 @@
 package online.onenut.cointracker.data.model
 
 import android.content.Context
+import online.onenut.cointracker.data.dao.CategoryDao
+import online.onenut.cointracker.data.dao.ExpenseDao
+import online.onenut.cointracker.data.dao.IncomeDao
 
 object Injection {
 

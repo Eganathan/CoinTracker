@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import online.onenut.cointracker.data.dao.CategoryDao
+import online.onenut.cointracker.data.dao.ExpenseDao
+import online.onenut.cointracker.data.dao.IncomeDao
 import online.onenut.cointracker.strings.DBKeys
 
 @Database(

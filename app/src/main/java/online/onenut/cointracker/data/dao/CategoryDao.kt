@@ -1,7 +1,8 @@
-package online.onenut.cointracker.data.model
+package online.onenut.cointracker.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import online.onenut.cointracker.data.model.Category
 
 @Dao
 interface CategoryDao {
