@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
+import online.onenut.cointracker.strings.NavRoutes
 import online.onenut.cointracker.ui.home.state.HomeState
 
 @Composable
@@ -88,7 +89,7 @@ fun HomeScreenComponent(
                             bottomEnd = 5.dp
                         )
                     )
-                    .clickable {},
+                    .clickable { homeState.navController.navigate(NavRoutes.expensesListScreen) },
                 elevation = 1.dp,
                 shape = RoundedCornerShape(
                     topStart = 5.dp,
@@ -127,7 +128,7 @@ fun HomeScreenComponent(
                             bottomEnd = 5.dp
                         )
                     )
-                    .clickable {},
+                    .clickable { homeState.navController.navigate(NavRoutes.incomesListScreen) },
                 elevation = 1.dp,
                 shape = RoundedCornerShape(
                     topStart = 5.dp,
