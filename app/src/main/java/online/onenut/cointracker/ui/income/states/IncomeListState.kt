@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import online.onenut.cointracker.data.model.Income
 import online.onenut.cointracker.ui.income.IncomeViewModel
@@ -35,7 +36,7 @@ class IncomeListState @OptIn(
     val focusRequester: FocusRequester,
     val context: Context
 ) {
-    val incomes = viewModel.allIncome
+    val incomes : Flow<List<Income>> = viewModel.allIncome
 
     val titleTF = mutableStateOf(TextFieldValue())
     val descriptionTF = mutableStateOf(TextFieldValue())

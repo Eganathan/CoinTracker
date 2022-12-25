@@ -9,9 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
-import androidx.compose.material.Surface
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +20,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import online.onenut.cointracker.strings.NavRoutes
 import online.onenut.cointracker.ui.home.state.HomeState
@@ -41,7 +43,8 @@ fun HomeScreenComponent(
             onCancel = { homeState.showQuickAdd.value = false },
             title = homeState.title,
             amount = homeState.amount,
-            type = homeState.type
+            type = homeState.type,
+            focusRequester = homeState.focusRequester
         )
 
 
@@ -75,7 +78,8 @@ fun HomeScreenComponent(
                 .fillMaxWidth()
                 .heightIn(150.dp)
                 .padding(bottom = 6.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
         ) {
             Card(
                 Modifier
@@ -103,8 +107,15 @@ fun HomeScreenComponent(
                 Column(
                     Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Surface() {
-
+                    Box(
+                        Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = homeState.totalExp.collectAsState(initial = 0.0).value.toString(),
+                            style = MaterialTheme.typography.h4,
+                            textAlign = TextAlign.Center
+                        )
                     }
                     Text(
                         text = "  Expenses     >>>",
@@ -141,8 +152,15 @@ fun HomeScreenComponent(
                 Column(
                     Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Surface() {
-
+                    Box(
+                        Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = homeState.totalInc.collectAsState(initial = 0.0).value.toString(),
+                            style = MaterialTheme.typography.h4,
+                            textAlign = TextAlign.Center
+                        )
                     }
                     Text(
                         text = "  Income     >>>",
@@ -174,6 +192,8 @@ fun HomeScreenComponent(
                 ), thickness = 2.dp
         )
 
+        val expenses = homeState.recentlyAdded.collectAsState(initial = listOf())
+
         LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
 
             item {
@@ -181,10 +201,10 @@ fun HomeScreenComponent(
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    Text(text = "Recently Added...  Size: ${homeState.recentlyAdded.value?.size}")
+                    Text(text = "Recently Added...")
                 }
             }
-            items(homeState.recentlyAdded.value.orEmpty()) {
+            items(expenses.value) {
                 Card(
                     Modifier
                         .heightIn(min = 85.dp)

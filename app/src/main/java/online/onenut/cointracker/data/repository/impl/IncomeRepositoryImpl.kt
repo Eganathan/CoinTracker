@@ -14,7 +14,7 @@ class IncomeRepositoryImpl(private val incomeDao: IncomeDao) : IncomeRepository 
         return incomeDao.getIncomes()
     }
 
-    override suspend fun getIncome(id: Long): Income? = incomeDao.getIncome(id)
+    override suspend fun getIncome(id: Long): Income = incomeDao.getIncome(id)
 
     override suspend fun createIncome(income: Income) {
         incomeDao.createIncome(income)

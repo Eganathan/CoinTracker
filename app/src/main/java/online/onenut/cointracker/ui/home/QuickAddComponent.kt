@@ -33,10 +33,10 @@ fun QuickAddComponent(
     title: MutableState<TextFieldValue>,
     amount: MutableState<TextFieldValue>,
     type: MutableState<Type>,
+    focusRequester: FocusRequester,
     onCancel: () -> Unit,
     onDone: () -> Unit
 ) {
-    val focusRequester = FocusRequester()
     val fm = LocalFocusManager.current
 
     Dialog({
@@ -166,9 +166,5 @@ fun QuickAddComponent(
             }
         }
 
-
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
     }
 }

@@ -16,9 +16,9 @@ interface ExpenseDao {
     fun deleteExpense(expense: Expense)
 
     @Query("SELECT * FROM expenses_table")
-    fun getExpenses(): List<Expense>?
+    fun getExpenses(): Flow<List<Expense>>
 
     @Query("SELECT * FROM expenses_table WHERE expense_id == :id")
-    fun getExpense(id: Long): Flow<Expense?>
+    fun getExpense(id: Long): Expense?
 
 }

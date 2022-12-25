@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
 
                     val expenseRepository = ExpenseRepositiryImpl(coinTrackerDB.ExpenseDao())
                     val incomeRepository = IncomeRepositoryImpl(coinTrackerDB.IncomeDao())
-                    val homeState = rememberHomeState(HomeViewModel(expenseRepositiry = expenseRepository), navController)
+                    val homeState = rememberHomeState(HomeViewModel(expenseRepositiry = expenseRepository, incomeRepositoryImpl = incomeRepository), navController)
 
                     val navigation = NavHost(
                         navController = navController,

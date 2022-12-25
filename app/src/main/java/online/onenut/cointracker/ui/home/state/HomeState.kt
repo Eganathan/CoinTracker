@@ -1,7 +1,6 @@
 package online.onenut.cointracker.ui.home.state
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -15,54 +14,68 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import online.onenut.cointracker.data.model.Expense
+import online.onenut.cointracker.data.model.Income
 import online.onenut.cointracker.ui.HomeViewModel
+import kotlin.math.roundToInt
 
 enum class Type { EXPENSE, INCOME }
 
 class HomeState @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class) constructor(
     private val viewModel: HomeViewModel,
     val navController: NavController,
-    scope: CoroutineScope,
-    keyboardController: SoftwareKeyboardController?,
-    modalBottomSheetState: ModalBottomSheetState,
-    focusManager: FocusManager,
-    focusRequester: FocusRequester,
-    context: Context
+    val scope: CoroutineScope,
+    val keyboardController: SoftwareKeyboardController?,
+    val modalBottomSheetState: ModalBottomSheetState,
+    val focusManager: FocusManager,
+    val focusRequester: FocusRequester,
+    val context: Context
 ) {
+
     val showQuickAdd: MutableState<Boolean> = mutableStateOf(false)
     val title = mutableStateOf(TextFieldValue(""))
     val amount = mutableStateOf(TextFieldValue(""))
     val type = mutableStateOf(Type.EXPENSE)
 
-    val recentlyAdded: LiveData<List<Expense>> = viewModel.expensesList
+    val expenses = viewModel.allExpenses
+    val incomes = viewModel.allIncomes
+
+    val recentlyAdded = expenses
+
+    val totalExp: Flow<Int> = expenses.map { exp ->
+        exp.sumOf { it.amount ?: 0.0 }.roundToInt()
+    }
+    val totalInc: Flow<Int> = incomes.map { inc ->
+        inc.sumOf { it.amount ?: 0.0 }.roundToInt()
+    }
 
     fun quickAdd() {
         when (type.value) {
             Type.EXPENSE -> {
-//                vm.createExpense(
                 viewModel.createExpense(
                     expense =
                     Expense(
-                        ID = 0,
                         title = title.value.text,
                         amount = amount.value.text.toDoubleOrNull() ?: 0.0,
                     )
                 )
             }
-            Type.INCOME -> TODO()
+            Type.INCOME -> {
+                viewModel.createIncome(
+                    income =
+                    Income(
+                        title = title.value.text,
+                        amount = amount.value.text.toDoubleOrNull() ?: 0.0,
+                    )
+                )
+            }
         }
         title.value = TextFieldValue()
         amount.value = TextFieldValue()
-        getExpenses()
-        Log.e("ADD", "${recentlyAdded.value?.size}")
-    }
-
-    fun getExpenses() {
-        viewModel.getAllExpenses()
     }
 }
 
